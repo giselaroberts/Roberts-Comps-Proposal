@@ -1,0 +1,259 @@
+\documentclass[10pt,twocolumn]{article}
+
+% use the oxycomps style file
+\usepackage{oxycomps}
+
+% usage: \fixme[comments describing issue]{text to be fixed}
+% define \fixme as not doing anything special
+\newcommand{\fixme}[2][]{#2}
+% overwrite it so it shows up as red
+\renewcommand{\fixme}[2][]{\textcolor{red}{#2}}
+% overwrite it again so related text shows as footnotes
+%\renewcommand{\fixme}[2][]{\textcolor{red}{#2\footnote{#1}}}
+
+% read references.bib for the bibtex data
+\bibliography{references}
+
+% include metadata in the generated pdf file
+\pdfinfo{
+    /Title (The Occidental Computer Science Comprehensive Project: Goals, Timeline, Format, and Advice)
+    /Author (Justin Li)
+}
+
+% set the title and author information
+\title{Live Music Visualizer Web App}
+\author{Gisela Roberts}
+\affiliation{Occidental College}
+\email{robertsg@oxy.edu}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Music is a fundamental part of human culture, influencing emotions, creativity, and even cognitive functions. However, music is traditionally experienced through sound alone, leaving a gap for those who seek a more immersive, multi-sensory experience. A live music visualizer bridges this gap by converting audio into real-time visual representations, enhancing how audiences perceive and interact with music.
+
+The goal of this project is to develop an interactive, web-based, real-time music visualizer that dynamically responds to live audio input, creating engaging and interactive visual effects using the Web Audio API for audio analysis and Canvas for rendering. 
+The visualizer will process audio input using Fast Fourier Transform (FFT) through Web Audio API to extract frequency and amplitude data. This data will be visualized in a range of customizable outputs.
+Users will be able to interact with the visualizer through controls that adjust colors and visualization modes. 
+
+The visualizer can be used for music performances, personal entertainment, accessibility for hearing-impaired individuals, and creative expression.
+
+This project draws inspiration from the visual music animators of the early 1900s such as Mary Ellen Butte and Oskar Fischinger. Of course, more recent computer-based music visualizers such as Milkdrop are a heavy reference point. Lastly, this visualizer also references rave and live music visuals, enhancing the listening experience with dynamic visuals. 
+
+\subsection{Problem Context}
+Generally, music visualizers can enhance listening experiences from personal to larger music contexts such as raves and live dj sets. As shown through Sandeep Gupta’s study on pain distraction through music and visualizations, combining music and music visualization can help listeners to be more deeply involved in the listening experience. In the case of this study, compared to using just music or just visualizations as a pain distraction in patients, the combinination led to significantly more distraction. \cite{gupta_distraction_2019}. This can be extended outside of the medical sense to assume that music listeners, in all contexts,  connect more with music when paired with visualizations. While various digital music visualizers exist to address this need, they don’t necessarily fill the needs of the general public. Many are inconvenient to access, needing a login or subscription payment, or even needing third party softwares or Parallels to run on a mac (Milkdrop). Created a convenient web-based visualizer that it free to access will certainly fill a need in the current music visualizer world. 
+Apart from general entertainment needs, music visualizers are especially valuable to the deaf and hard of hearing community. As stated by the creators of the visualizer tool ViTune, “members of [the deaf and hard of hearing community (DHH)] inability to hear music in its entirety can lead to difficulties such as expressing emotions, making meaningful social connection, and recognizing culture” \cite{deja_vitune_2020}. An accessible music visualizer tool is needed to help to address these concerns.
+
+\subsection{Historical Background}
+The beginnings of computer-based musical visualizers certainly is inspired by and follows the visual music animation of the early 1900s. In "A New History of Animation", Maureen Furniss explores the evolution of visual music, highlighting the pioneering contributions of artists who sought to merge auditory and visual experiences. These pioneers were driven by a desire to create a universal language that transcended the boundaries of spoken word, aiming to evoke emotions and concepts through synchronized audiovisual experiences. Influenced by contemporary artistic movements such as abstract expressionism and modernism, they sought to break away from traditional narrative forms, embracing abstraction to capture the essence of musical compositions visually. She discusses the early 20th-century experiments of German animator Oskar Fischinger, who created abstract animations synchronized with musical compositions, thereby laying the groundwork for future explorations in this field. Furniss also examines the work of filmmakers like Walter Ruttmann and visual music pioneer Mary Ellen Bute, whose innovative approaches further advanced the integration of visual art and music. These early explorations have profoundly influenced contemporary practices in music visualization, including modern web-based visualizers that react in real-time to audio inputs.
+
+
+\subsection{Technical Background}
+One of the main technical features of this project is the live audio intake that will allow the visualizer to react accordingly. A technical resource that will bear the main weight of this function is Web Audio API. The Web Audio API is a Javascript API that allows developers to capture, manipulate, and analyze sound in a web browser\cite{noauthor_web_2025}. Specifically for the web-based music visualizer project, capturing audio input through the microphone will be essential which the Web Audio API supports. To work with the API, you first create an instance of the audio context. This gives you access to all its features. Specifically for this project, I want to extract data from audio to analyze it for the visualization. For this I will use the AnalyserNode. This interface represents a node able to provide real-time frequency and time-domain analysis information, using the Fast Fourier Transform algorithm. This algorithm will take a stream of audio data, or waveform, and discern which frequencies are present in the sound and how strong each one is. Using this in the project will pass the audio from input to output unchanged, but allows the developer, me, to take the data to process and create audio visualizations\cite{noauthor_web_2025}. 
+
+Following the intake of data, the visualizer must of course then visualize this data with 2D and 3D graphics for the users. The 2D visualization can be accomplished using tools such as the HTML5 Canvas API. The Canvas API helps with drawing graphics with JavaScript and HTML\cite{noauthor_canvas_2024}. If this project goes beyond 2D graphics into 3D, I can use tools such as WebGL. WebGL is another JavaScript API for rendering interactive 3D and 2D graphics in a web browser. Like the Canvas API, WebGL is used in HTML <canvas> elements\cite{noauthor_webgl_nodate}. 
+
+
+\section{Prior Related Work}
+One piece of prior work that is heavily related to this visualizer project is ViTune. Created in 2020, Vitune attempts to “create an inclusive, effective, and viable visualization system of music for the Deaf and Hard of Hearing” \cite{deja_vitune_2020}. The creators credit two main approaches to the presentation of past music visualizers. One presentation type is what they call the “piano roll” which presents a timeline of musical notes and aspects on the screen where you can see the future events at one end of the screen which eventually scroll to the present. The second visual classification is the “movie roll”. In this case, only the current musical events are shown on the screen and take up the whole screen space. This paper argues that this approach to visualizers allows for more creativity and artistic freedom, and more importantly is better fit for augmenting experiences for deaf and hard of hearing individuals \cite{deja_vitune_2020}. This approach of the ViTune visualizer definitely inspires the work of my project which will focus on this “movie roll” approach for a better user experience. 
+
+The methodology of the ViTune creation process will also be helpful to implement into my project plan. They used a 3 step iterative development process. Firstly, starting with knowing and understanding the needs of the deaf and hard of hearing. Their second stage was designing and implementing the visualizations. Finally, the third stage was the validation of the finished product with user feedback. With the iterative process, they repeated these stages until their feedback was positive. The emphasis on user understanding and feedback is certainly a helpful way to make a successful product and is something I will implement in my process. 
+
+For the technical side, ViTune used Librosa for the audio processing. This is a python package for music and audio analysis. It serves a similar purpose to that of the Web Audio API mentioned in the Technical Background section, by dividing harmonic components into four frequency classifications: background, lowground, highground, and foreground \cite{deja_vitune_2020}. For the visualizations, chromagrams are created from the analysis and packaged into a JSON file. 
+
+Other relevant works include the Chrome Music Lab. This is a great example of an accessible, web-based platform. The Chrome Music Lab has various music tools such as song makers and visualizers, all created using the Web Audio API \cite{noauthor_chrome_nodate}. Both the accessibility appraoch of the project as well as the technical side are factors that I will work with and work into my own visualizer.
+
+Another popular music visualizer tool is Milkdrop. Created in 2001 by Ryan Geiss, Milkdrop was extremely popular in the early 2000s. The visualizer centers user involvement and customization which is a beneficial feature for the products success. For example, it uses presets which allows its users to select the specific aesthetic or style of their visualizations. In addition, Milkdrop allows users to create their own presets. In 2007 Milkdrop adopted pixel shaders which allowed for a more impressive and immersive visual experience. The software requires Winamp, a microsoft media player, to run and therefore is not extremely accessible or easy to use \cite{noauthor_geisswerks_nodate}.
+
+ViTune \cite{deja_vitune_2020}
+
+
+
+
+ 
+\section{Methods and Evaluation}
+For my mini-project this semester, I focused in on some of the technical tools mentioned: primarily the Web Audio API. I practiced implementing the API by creating a small-scale, web-based, live music visualizer. I will follow a similar methods and evaluation framework in implementing my final COMPS project in the fall semester in a larger scale.
+I created a specific timeline of skills and goals to meet within this mini project. These goals included: (1) creating a local web-based application, (2) capturing audio input from device microphone, (3) extracting frequency data and displaying dynamic frequency bars animation, and finally, (4) cleaning up aesthetics and creating a visually pleasing application. 
+\subsection{Methods}
+Accomplishing goal (1) was fairly straight forward. Using the WebStorm IDE, I created an HTML and JavaScript file to set up the basic framework for my local web app where I could eventually implement my visualizer.
+
+Goal (2) was similarly simple. I was able to capture audio input from my device's microphone using the Web Audio API. I created a AudioContext variable, and from there could easily request microphone access using one of the APIs functions. The previously cited Web Audio API documentation was extremely helpful in accomplishing this goal \cite{noauthor_web_2025}. 
+
+For goal (3), I used a combination of resources to accomplish extracting the audio frequency data and displaying the frequency bar animation. Along with the mentioned Web Audio API documentation cited prior, the video walkthrough and tutorial "Building a Dynamic JavaScript Audio Visualizer with the Web Audio API" created similar visuals to my goal and was a very helpful method in accomplishing my desired product \cite{QuickCodingTuts}. 
+
+Accomplishing goal (4) required creating a css file in my IDE, and altering styles for my desired result. It was important that the cite was aesthetically pleasing, so I elected 5 participants to test the app and give feedback on what could make the cite more pleasing or intuitive. I applied this feedback in my css file accordingly. 
+\subsection{Evaluation}
+As my mini-project did not fully center around user experience, I used minimal user testing through its development. Instead, I focused on evaluating the efficiency of my methods used in created a working and aesthetic product. 
+
+Goal (1) required creating a simple web app that could run locally on my personal device. This was accomplished successfully. Opening the html file from my project opened the window in my default browser, where changes I made in my IDE would accordingly update in the window upon refresh. 
+
+Goal (2) in the mini project was to ensure I could capture live audio input with my web app. This was  clearly evaluated as a success. Using the Web Audio API, the program asks the browser microphone for access and creates an audio source from the microphone input. This function is set up to run when the user clicks the start button. On each click of the start button, the browser asks permission to access the devices microphone, showing the success of goal (1).
+
+Goal (3) was similarly clearly accomplished. After the user (me) allows microphone access, frequency bars begin displaying on the canvas according to the sound input. The bars change color on a spectrum of blue to pink with the height of the bars (lower = blue, higher = pink). The height, or the "y-value" of the bar graph corresponds to the frequency \textit{value} (from 0-255) of the sound. The "x-value" of the bar graph represents the frequency \textit{range} (from low to high), meaning that bars on the leftmost side of the graph represent the lower frequency sounds while the rightmost represents the highest frequency sounds. Therefore, when I play sounds with high, sharper sounds, the bars on the right will jump up more and show pinker. When I play sounds with deeper, bassier sounds, the bars on the left with show pinker. I was able to successfully evaluate this function by playing a 20Hz to 20kHz audio spectrum and see the bars move from left to right \cite{adminofthissite}.
+
+As mentioned briefly, goal (4) was accomplished with minimal user testing with 5 participants. Participants were not chosen randomly and so may lead to possible bias in evaluation. 3 of 5 participants requested more use of color. I responded accordingly by adding color to the background of my header text. 1 of 5 participants mentioned a displeasure with no button reaction. I therefore added a different hover color to create a more dynamic button. 
+
+There was a collection of participant feedback that I could not address due to time or scope that I hope to address in further research. One is that the microphone clearly picks up background noises (voices, white noise, etc.) besides the song played which conflicts with the product's purpose. Another participant mentioned that they would have liked to customize the visual, specifically the colors of the bar graph. These are both important considerations as I continue the development and research of my larger music visualizer project. 
+
+\section{Ethical Considerations}
+Considering the ethical implications of the Music Visualizer project is an important step in creating the best product for a universal target audience. I will present some ethical considerations and debates regarding the topic of my project including: Ethics of digital media for well-being, ethics of digital media ownership and distribution, and finally the ethics of digital technologies for addressing disability.
+\subsection{Ethics of Digital Media}
+Firstly, I want to explore and address the general ethics of Digital Technology and Media, especially in the entertainment sector as it relates to my project. Technology and digital media is a growing presence in everyone's lives and naturally introduces new ethical considerations and debates in response. And, as stated in Improving Technology through Ethics, the culture of western engineering has largely centered problems that can be solved through technology or math and science, while ignoring social, value-based, and philisophical approaches to problems \cite{ProQuest}. Accordingly, incorporating more social and ethical approaches to technological products is important in wholly addressing the rising ethical issues in technology. 
+
+Specifically in considering my Web-based live music visualizer products, a few questions in this field of ethics arise: How could the visualizer benefit the users well-being (visual stimulation and entertainment)? How could it harm the users well-being (replacing live, social entertainment)? Can users ethically share their visualizations of someone else's work and art with larger audiences? And can I ethically take sole credit for work that will be based in larger user feedback?
+
+I aim to address and answer these questions through broader scopes in the following subsections: Ethics of Digital Media and Well-Being, and Ethics of Digital Media usage
+\subsubsection{Ethics of Digital Media and Well Being}
+The Ethics of Digital Well-Being: A Thematic Review defines digital well-being as "the impact of digital technologies on what it means to live a life that is good for a human being" \cite{nihEthicsDigital}. With digital technologies surrounding us, our well being is undeniably tied to these technologies. This is definitely a concern that arises for me when imagining the purpose and use of the web-based live music visualizer. While it could give people a break from a stressful day or an enhanced listening experience of their favorite song, I can also imagine the use of this project, as with many forms of digital entertainment, being overused and keeping its users from engaging in 'human' life and entertainment outside of digital media. 
+
+I will pose two sides to this debate, broadening outside of the scope of my own project to digital media and entertainment generally. One side being that digital technologies provide wider acces to services and information as well as increasing productivity. The other side states that these technologies can lead to mental well-being issues. 
+
+Some examples posed by the Ethics of Digital Well-Being paper for the first argument include Virtual Reality (VR). Virtual reality can make public resources more accessible, such as art museums, which can directly improve users mental well-being \cite{nihEthicsDigital}. Digital personification through game avatars for example also allow youth to experiment with self expression and project themselves onto this character solving problems and working with community. Further, in a study on using technology to support the emotional and social well-being of nurses, researches found that digital technologies such as messanger apps and online forums, decreased stress and isolation - leading to imporved well being in nurses\cite{UsingTechnologyNurses}. 
+
+However, these same technologies, such as VR, have been proven to lead to psychological changes. Youth spending too much time in cyber-worlds through video games and Virtual Reality worlds can effectively train the brain through neuro plasticity to development partially in accordance with these faux-worlds and affect their well-being in the real world \cite{nihEthicsDigital}.
+
+While this doesn't directly answer the ethical question of technology's impact on well being, it provides a context of understanding the ethics from both sides so that I and others can approach their products with these in mind. 
+
+
+\subsubsection{Ethics of Digital Media Usage}
+The authors of Young People, Ethics, and the New Digital Media discuss the idea of "good play" in online spaces. They define play as leisure or hobby-based activities such as gaming, social networking, and content creation \cite{mitYoungPeople}. "Good play" specifically consists of "online conduct that is both meaningful and engaging to the participant and responsible to others in the community in which it is carried out" \cite{mitYoungPeople}. From an ethical standpoint, it is stated that "play in the new digital media is fraught with different ethical potentials and perils than offline play because participants can be anonymous, assume fictional identity, and exit voluntary communities, games, and cyber worlds whenever they please" \cite{mitYoungPeople}. Of course, these facts make ethics considerably more complicated in the field of technology and digital media. With less accountability and social stakes in online spaces, it is much easier for users of digital media spaces to disregard the "good play" responsibility.  
+
+In regards to my project, I specifically want to focus on how these ethics are involved in authorship and ownership of digital media. The public and world-wide nature of the Internet and digital medias challenges what authorship and ownership really mean. Authored material such as articles is completely public and accessible to copy and share or reuse. As stated in Young People, Ethics, and the New Digital Media, this fact brings up a "temptation to abuse the free flow of information and content online" \cite{mitYoungPeople}. 
+In terms of the music visualizer project, this could encourage users to record and share music content captured from the website to other platforms illegally, putting entertainment companies and musical artists at a loss. 
+To add yet another layer of ethics, this illegal spread of information could be viewed as both ethical and unethical. Some youth, for instance, frame this sort of illegal sharing in "Robin Hood-like terms" - taking from the mega wealthy artists and entertainment companies and sharing with the public \cite{mitYoungPeople}. Artists' fans illegally sharing content can also tend to increase popularity and visibility for artists.
+
+Overall, it is hard to concretely pick a side when it comes to the ethics of digital entertainment ownership. However, considering the possible harms of my Music Visualizer product will ensure that I create a product that avoids as much harm as possible.
+\subsection{Ethics of Alternate Experiences for Hard-of-Hearing Community}
+In "Analysis of Accessible Digital Musical Instruments through the lens of Disability Models", the authors explore existing studies and literatures surrounding Accessible Digital Musical Instrument (ADMIs)\cite{ADMIs}. Specifically, they analyze these studies to determine the disability model the use to fuel the research and their effectiveness and therefrom. While my project is not working directly with Instrumentation or ADMIs, I found that the direct research regarding musical experience for Deaf people is very relevant in understanding the issues and ethical considerations if I intend to target my project towards music accessibility for the deaf and hard of hearing. 
+
+The paper specifically bases its claims and research in three disability models: the medical model, the social model, and the cultural model which I will define respectively. 
+
+The medical model defines disability as a "clinically observable impairment" \cite{ADMIs} that requires treatment or a "cure" in order to ease the individual's existence in society. This model wholly centers the individual and asks them to change or access treatment. In the scope of my project, using the medical model approach might look like expecting hard of hearing folks to use hearing aids in order to experience music. 
+
+The social model of disability states that it is in fact our physical and social environments and systems that leave out and fail to consider groups of people\cite{ADMIs}. This model largely arose from the the Disability Rights movement of the 60s and 70s and removed the centralization of the individual - shifting instead to society as a whole that should by altered. For example, providing an alternate music experience on music platforms for hard of hearing people. This is my intention for addressing accessibility in my music visualizer - creating an easy alternative to the music listening experience. 
+
+The cultural model considers how disability is a cultural difference based on historical and experiential background\cite{ADMIs}. In this perspective, disability is a part of human diversity. Similar to the social model, the cultural model asks that we re-frame societal perspectives and acceptance, again de-centering the individual. Addressing my project through this lens would again be similar to the social model - altering societal expectations by creating an alternative music experience through visualization. 
+
+
+Understanding these models is important to contextualize the current efforts in accessible technologies and to introduce the ethics of creating such technologies - specifically in creating accessible music experience technologies such as I will with the web-based live music visualizer. It is important to note that music participation allows for emotional growth and sociability as well as the development of fine motor skills and cognitive capabilities \cite{ADMIs}, so reworking our current structure of music experience that majorly centers hearing people serves a larger and more critical purpose than solely entertainment.
+
+Through the analysis of research in Analysis of Accessible Digital Musical Instruments, the authors found that "most studes in the field have focused mainly on approaches that can be identified with the medical model of disability" instead of the social or cultural model. It was also found that these often also did not include disabled people, specifically deaf people, in the research process\cite{ADMIs}. The few studies classified into the social and cultural approaches, however, did include disabled people in their research process. 
+
+From an ethical standpoint, specifically in relation to the Disability Rights movement, following the social and cultural models is the best approach to increasing accessibility. Reworking our current systems to include everyone, rather than trying to use technologies to "fit" differently-abled people into our exclusionary able-body-centered society, will create a better and more ethical experience for people with disabilities.
+
+Regarding the Web-Based live music visualizer, it will be important to keep this ethical social and cultural approach centered. As seen in the ADMI paper, this would mean: including hard of hearing users in my research and development process, addressing changing societal structures rather than individual's abilities, and incorporating historical and cultural background into the creation of my product.
+
+\section{Timeline}
+Following is a proposed timeline for the Fall semester as well as the summer leading up to the semester. This will include steps that I believe I need to take according to the current understanding of my project and project scope. 
+
+
+\subsection{Summer schedule:}
+
+My summer will be used to enhance general skills and increase comfortability in languages that will be important to be prepated with for my project process in the Fall. \\\\
+
+
+June\\
+
+
+    Week 1:
+
+    Refresh on javascript, create a button that changes page text and logs input\\
+    
+    Week 2:
+
+    Canvas API practice, set up a canvas and draw shapes and requestAnimationFrame() to create a brouncing ball animation\\
+    
+    Week 3:
+
+    Web Audio API practice, set up AnalyserNode to retrieve frequency data\\
+    
+    Week 4:
+
+    Combine Canvas API and Web Audio API to animate real-time mic data, like my mini project, and experiment with different shapes and visuals\\
+
+July\\
+
+
+    Week 1: 
+    Intro to Three.js, set up a scene, camera, and renderer, add shaped, build a rotating cube and control in with mouse\\
+    
+    Week 2:
+    Connect audio to 3D objects, create different objects that respond to different frequency ranges\\
+    
+    Week 3:
+    Brush up on UI skills, learn basic HTML inputs like sliders and buttons, control visualizer settings\\
+    
+    Week 4: 
+    Ensure responsive layouts for different screen sizes, using CSS Flexbox?\\
+
+August\\
+
+
+    Week 1:
+    Mockup final project workflow and features\\
+    
+    Week 2:
+    Get feedback and update Mockup/plan\\
+    
+    Week 3:
+    Create a documentation strategy, possibly a google doc, and summarize my work from the summer\\
+    \\
+
+
+\subsection{Fall Schedule:}
+
+In the Fall, with a stronger foundation from my summer skill-building, I will start on the project itself by following this schedule. As I work through this timeline, I will take feedback and adjust to my own learnings.\\\\\\
+
+September\\
+
+    Week 1: 
+    Basic app setup. Set up repo on Github, create working layout (canvas, start, basic UI)\\
+    
+    Week 2:
+    Implement waveform view and frequency bar view, add toggle to switch between these modes, experiment with colors and visuals\\
+    
+    Week 3:
+    Set up Three.js scene, add simple 3D shapes that respond to microphone input\\
+    
+    Week 4:
+    Refactor visual modes into separate functions, create function that handles switching\\
+
+October\\
+
+    Week 1:
+    Add customization ability - sliders for color and bar spacing\\
+    
+    Week 2:
+    Implement basic beat detection and correspond to trigger pulses in animation, add toggle to enable or disable beat mode\\
+    
+    Week 3:
+    Research music alternatives for deaf and hard-of-hearing listeners.\\
+    
+    Week 4:
+    Add mode specialized for deaf and hard of hearing, based on research\\
+
+November\\
+
+    Week 1: 
+    Add screenshot or video capture feature for users to save their visualizations\\
+    
+    Week 2:
+    Share project and collect feedback from users\\
+    
+    Week 3:
+    Implement feedback and fix bugs\\
+    
+    Week 4:Continue implemening feedback, finalize UI and visual design\\
+
+December\\
+
+    Week 1: Find a live music show that would use my site!\\
+    
+\appendix
+
+
+
+\printbibliography
+
+\end{document}
